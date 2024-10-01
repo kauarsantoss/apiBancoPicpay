@@ -37,5 +37,11 @@ jobs:
         # A Render API key
         api-key: ${{ secrets.USER_KEY }}
           
-
-    
+    - name: Deploy no EC2
+      run: |
+            echo "${{ secrets.KEY_EC2 }}" > chave_de_acesso && chmod 400 chave_de_acesso
+            ssh -o StrictHostKeyChecking=no -i "chave_de_acesso" ubuntu@ec2-98-82-143-30.compute-1.amazonaws.com "
+                  cd /home/ubuntu/springEasy-Render &&
+                  git pull origin main &&
+                  mvn clean package -DskipTests && 
+                  ./executar.sh "
